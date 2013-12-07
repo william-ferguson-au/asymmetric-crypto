@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) Xandar IP 2013.
+  ~ All Rights Reserved
+  ~ No part of this application may be reproduced, copied, modified or adapted, without the prior written consent
+  ~ of the author, unless otherwise indicated for stand-alone materials.
+  ~
+  ~ Contact support@xandar.com.au for copyright requests.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>au.com.xandar</groupId>
+    <artifactId>crypto</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <scm>
+        <connection>scm:git:https://github.com/william-ferguson-au/random-symmetric-crypto.git</connection>
+        <developerConnection>scm:git:https://github.com/william-ferguson-au/random-symmetric-crypto.git</developerConnection>
+        <url>https://github.com/william-ferguson-au/random-symmetric-crypto.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <distributionManagement>
+        <downloadUrl>http://insomnia:8081/nexus/content/repositories/releases</downloadUrl>
+        <repository>
+            <id>xandar.releases</id>
+            <name>Xandar Repository</name>
+            <url>http://insomnia:8081/nexus/content/repositories/releases</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>xandar.snapshots</id>
+            <name>Xandar Snapshot Repository</name>
+            <url>http://insomnia:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.8</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.11</version>
+            </dependency>
+
+            <!-- Json -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>2.2.2</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Json -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+</project>
