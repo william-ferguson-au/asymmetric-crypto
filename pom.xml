@@ -19,9 +19,9 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <scm>
-        <connection>scm:git:https://github.com/william-ferguson-au/random-symmetric-crypto.git</connection>
-        <developerConnection>scm:git:https://github.com/william-ferguson-au/random-symmetric-crypto.git</developerConnection>
-        <url>https://github.com/william-ferguson-au/random-symmetric-crypto.git</url>
+        <connection>scm:git:git@github.com:william-ferguson-au/random-symmetric-crypto.git</connection>
+        <developerConnection>scm:git:git@github.com:william-ferguson-au/random-symmetric-crypto.git</developerConnection>
+        <url>ssh://git@github.com:william-ferguson-au/random-symmetric-crypto.git</url>
         <tag>HEAD</tag>
     </scm>
 
