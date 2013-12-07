@@ -14,7 +14,7 @@
 
     <groupId>au.com.xandar</groupId>
     <artifactId>crypto</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:git@github.com:william-ferguson-au/random-symmetric-crypto.git</connection>
