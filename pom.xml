@@ -26,17 +26,17 @@
     </scm>
 
     <distributionManagement>
-        <downloadUrl>http://insomnia:8081/nexus/content/repositories/releases</downloadUrl>
+        <downloadUrl>http://insomniac:8081/nexus/content/repositories/releases</downloadUrl>
         <repository>
             <id>xandar.releases</id>
             <name>Xandar Repository</name>
-            <url>http://insomnia:8081/nexus/content/repositories/releases</url>
+            <url>http://insomniac:8081/nexus/content/repositories/releases</url>
         </repository>
 
         <snapshotRepository>
             <id>xandar.snapshots</id>
             <name>Xandar Snapshot Repository</name>
-            <url>http://insomnia:8081/nexus/content/repositories/snapshots</url>
+            <url>http://insomniac:8081/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
