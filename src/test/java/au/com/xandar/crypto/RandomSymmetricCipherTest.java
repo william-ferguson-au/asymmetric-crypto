@@ -1,10 +1,10 @@
 package au.com.xandar.crypto;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 /**
  * Tests RandomSymmetricCipher.
@@ -31,26 +31,23 @@ public class RandomSymmetricCipherTest {
                     "eoxJEeDeow==";
 
     private final RandomSymmetricCipher cipher = new RandomSymmetricCipher();
-    private final ObjectMapper jsonTransformer = new ObjectMapper();
     private final CryptoPacketConverter cryptoPacketConverter = new CryptoPacketConverter();
 
     @Test
     public void testEncrypt() throws CryptoException, IOException {
-        testEncryptDecrypt("my test data");
-        testEncryptDecrypt(35);
+        testEncryptDecrypt("my test data".getBytes());
+        testEncryptDecrypt(new BigInteger("12345").toByteArray());
     }
 
-    private void testEncryptDecrypt(Object data) throws IOException, CryptoException {
-        final byte[] testData = jsonTransformer.writeValueAsBytes(data);
-        final CryptoPacket cryptoPacket = cipher.encrypt(testData, PRIVATE_KEY_BASE64);
+    private void testEncryptDecrypt(byte[] data) throws IOException, CryptoException {
+        final CryptoPacket cryptoPacket = cipher.encrypt(data, PRIVATE_KEY_BASE64);
         final String base64EncryptedData = cryptoPacketConverter.convert(cryptoPacket);
 
         System.out.println("Base64EncryptedData=" + base64EncryptedData);
 
         // Convert the data into a byte array that can be readily reconstituted at the other end.
         final byte[] outputBytes = cipher.decrypt(base64EncryptedData, PUBLIC_KEY_BASE64);
-        final Object outputData = jsonTransformer.readValue(outputBytes, data.getClass());
 
-        Assert.assertEquals(data, outputData);
+        Assert.assertArrayEquals(data, outputBytes);
     }
 }
