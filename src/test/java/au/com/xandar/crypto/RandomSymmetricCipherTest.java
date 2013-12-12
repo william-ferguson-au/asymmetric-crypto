@@ -3,7 +3,6 @@ package au.com.xandar.crypto;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.math.BigInteger;
 
 /**
@@ -34,12 +33,12 @@ public class RandomSymmetricCipherTest {
     private final CryptoPacketConverter cryptoPacketConverter = new CryptoPacketConverter();
 
     @Test
-    public void testEncrypt() throws CryptoException, IOException {
+    public void testEncrypt() throws CryptoException {
         testEncryptDecrypt("my test data".getBytes());
         testEncryptDecrypt(new BigInteger("12345").toByteArray());
     }
 
-    private void testEncryptDecrypt(byte[] data) throws IOException, CryptoException {
+    private void testEncryptDecrypt(byte[] data) throws CryptoException {
         final CryptoPacket cryptoPacket = cipher.encrypt(data, PRIVATE_KEY_BASE64);
         final String base64EncryptedData = cryptoPacketConverter.convert(cryptoPacket);
 

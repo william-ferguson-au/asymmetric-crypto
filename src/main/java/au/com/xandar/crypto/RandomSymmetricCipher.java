@@ -2,7 +2,6 @@ package au.com.xandar.crypto;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
-import java.io.IOException;
 import java.security.*;
 
 /**
@@ -108,10 +107,10 @@ public final class RandomSymmetricCipher {
      * @return byte array of the decrypted data.
      * @throws CryptoException if the publicKey cannot decrypt the encrypted symmetric key,
      *      or the symmetric key cannot decrypt the data,
-     *      or the Base64 encoded PublicKey cannot be decoded.
-     * @throws IOException if the Base64 encoded CryptoPacket cannot be converted to a CryptoPacket.
+     *      or the Base64 encoded PublicKey cannot be decoded
+     *      or the Base64 encoded CryptoPacket cannot be converted to a CryptoPacket.
      */
-    public byte[] decrypt(String base64EncodedPayload, String publicKeyBase64) throws CryptoException, IOException {
+    public byte[] decrypt(String base64EncodedPayload, String publicKeyBase64) throws CryptoException {
         // Convert Base64EncodedPayload into CryptoPacket
         final CryptoPacketConverter cryptoPacketConverter = new CryptoPacketConverter();
         final CryptoPacket cryptoPacket = cryptoPacketConverter.convert(base64EncodedPayload);

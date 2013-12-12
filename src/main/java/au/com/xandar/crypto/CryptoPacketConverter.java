@@ -22,14 +22,20 @@ public final class CryptoPacketConverter {
 
     private final Base64 base64 = new Base64();
 
-    public String convert(CryptoPacket cryptoPacket) throws IOException {
+    public String convert(CryptoPacket cryptoPacket) throws CryptoException {
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        stream.write(cryptoPacket.getEncryptedData().length);
-        stream.write(cryptoPacket.getEncryptedData());
-        stream.write(cryptoPacket.getEncryptedSymmetricKey().length);
-        stream.write(cryptoPacket.getEncryptedSymmetricKey());
-        stream.write(cryptoPacket.getSymmetricCipherInitializationVector().length);
-        stream.write(cryptoPacket.getSymmetricCipherInitializationVector());
+
+        try {
+            stream.write(cryptoPacket.getEncryptedData().length);
+            stream.write(cryptoPacket.getEncryptedData());
+            stream.write(cryptoPacket.getEncryptedSymmetricKey().length);
+            stream.write(cryptoPacket.getEncryptedSymmetricKey());
+            stream.write(cryptoPacket.getSymmetricCipherInitializationVector().length);
+            stream.write(cryptoPacket.getSymmetricCipherInitializationVector());
+        } catch (IOException e) {
+            // This is highly unlikely to occur, if not impossible.
+            throw new CryptoException("Cannot convert CryptoPacket into a Base64 String", e);
+        }
 
         final byte[] jsonPayload = stream.toByteArray();
         final byte[] base64Payload = base64.encode(jsonPayload);
@@ -37,7 +43,7 @@ public final class CryptoPacketConverter {
         return new String(base64Payload);
     }
 
-    public CryptoPacket convert(String base64Payload) throws IOException {
+    public CryptoPacket convert(String base64Payload) throws CryptoException {
         final byte[] payloadBytes = base64.decode(base64Payload.getBytes());
 
         final ByteArrayInputStream stream = new ByteArrayInputStream(payloadBytes);
@@ -48,12 +54,17 @@ public final class CryptoPacketConverter {
         return new CryptoPacket(encryptedData, encryptedSymmetricKey, symmetricCipherIV);
     }
 
-    private byte[] readByteArray(ByteArrayInputStream stream) throws IOException {
+    private byte[] readByteArray(ByteArrayInputStream stream) throws CryptoException {
         final int length = stream.read();
         final byte[] bytes = new byte[length];
-        final int nrBytesRead = stream.read(bytes);
-        if (length != nrBytesRead) {
-            throw new IOException("ReadError : expected " + length + " bytes but only found " + nrBytesRead);
+        final int nrBytesRead;
+        try {
+            nrBytesRead = stream.read(bytes);
+            if (length != nrBytesRead) {
+                throw new CryptoException("Invalid Base64 String. Expected " + length + " bytes but only found " + nrBytesRead);
+            }
+        } catch (IOException e) {
+            throw new CryptoException("Invalid Base64 String. Cannot convert Base64 String into a CryptoPacket");
         }
         return bytes;
     }
