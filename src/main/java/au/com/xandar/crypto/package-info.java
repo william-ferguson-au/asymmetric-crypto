@@ -13,12 +13,12 @@
  * <pre>
  * {@code
  * final RandomSymmetricCipher cipher = new RandomSymmetricCipher();
- * final CryptoPacketConverter cryptoPacketConverter = new CryptoPacketConverter();
  *
  * // Encrypt the data and the random symmetric key.
  * final CryptoPacket cryptoPacket = cipher.encrypt(inputData, PRIVATE_KEY_BASE64);
  *
  * // Convert the CryptoPacket into a Base64 String that can be readily reconstituted at the other end.
+ * final CryptoPacketConverter cryptoPacketConverter = new CryptoPacketConverter();
  * final String base64EncryptedData = cryptoPacketConverter.convert(cryptoPacket);
  *
  * System.out.println("Base64EncryptedData=" + base64EncryptedData);
