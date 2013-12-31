@@ -14,6 +14,8 @@ import org.apache.commons.codec.binary.Base64;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 /**
  * Responsible for converting a CryptoPacket into a Base64 String and vice versa.
@@ -44,7 +46,13 @@ public final class CryptoPacketConverter {
     }
 
     public CryptoPacket convert(String base64Payload) throws CryptoException {
-        final byte[] payloadBytes = base64.decode(base64Payload.getBytes());
+        final byte[] payloadBytes;
+        try {
+            payloadBytes = base64.decode(base64Payload.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            // UTF-8 should always be supported.
+            throw new CryptoException("Could not decode Base64 String", e);
+        }
 
         final ByteArrayInputStream stream = new ByteArrayInputStream(payloadBytes);
         final byte[] encryptedData = readByteArray(stream);
