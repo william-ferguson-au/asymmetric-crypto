@@ -15,7 +15,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 
 /**
  * Responsible for converting a CryptoPacket into a Base64 String and vice versa.
@@ -64,6 +63,9 @@ public final class CryptoPacketConverter {
 
     private byte[] readByteArray(ByteArrayInputStream stream) throws CryptoException {
         final int length = stream.read();
+        if (length < 0) {
+            throw new CryptoException("Byte array cannot be parsed - does not represent a CryptoPacketPayload");
+        }
         final byte[] bytes = new byte[length];
         final int nrBytesRead;
         try {
