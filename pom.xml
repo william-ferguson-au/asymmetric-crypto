@@ -14,13 +14,13 @@
 
     <groupId>au.com.xandar</groupId>
     <artifactId>xandar-crypto</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
 
     <scm>
         <connection>scm:git:git@github.com:william-ferguson-au/random-symmetric-crypto.git</connection>
         <developerConnection>scm:git:git@github.com:william-ferguson-au/random-symmetric-crypto.git</developerConnection>
         <url>ssh://git@github.com:william-ferguson-au/random-symmetric-crypto.git</url>
-        <tag>HEAD</tag>
+        <tag>xandar-crypto-1.0.2</tag>
     </scm>
 
     <distributionManagement>
