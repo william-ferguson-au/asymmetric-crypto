@@ -1,6 +1,6 @@
 package au.com.xandar.crypto;
 
-import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec_1_9.binary.Base64;
 
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
