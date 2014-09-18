@@ -13,6 +13,8 @@ import org.apache.commons.codec.binary.Base64;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -27,12 +29,13 @@ public final class CryptoPacketConverter {
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         try {
-            stream.write(cryptoPacket.getEncryptedData().length);
-            stream.write(cryptoPacket.getEncryptedData());
-            stream.write(cryptoPacket.getEncryptedSymmetricKey().length);
-            stream.write(cryptoPacket.getEncryptedSymmetricKey());
-            stream.write(cryptoPacket.getSymmetricCipherInitializationVector().length);
-            stream.write(cryptoPacket.getSymmetricCipherInitializationVector());
+            final DataOutputStream dataOutputStream = new DataOutputStream(stream);
+            dataOutputStream.writeInt(cryptoPacket.getEncryptedData().length);
+            dataOutputStream.write(cryptoPacket.getEncryptedData());
+            dataOutputStream.writeInt(cryptoPacket.getEncryptedSymmetricKey().length);
+            dataOutputStream.write(cryptoPacket.getEncryptedSymmetricKey());
+            dataOutputStream.writeInt(cryptoPacket.getSymmetricCipherInitializationVector().length);
+            dataOutputStream.write(cryptoPacket.getSymmetricCipherInitializationVector());
         } catch (IOException e) {
             // This is highly unlikely to occur, if not impossible.
             throw new CryptoException("Cannot convert CryptoPacket into a Base64 String", e);
@@ -53,7 +56,7 @@ public final class CryptoPacketConverter {
             throw new CryptoException("Could not decode Base64 String", e);
         }
 
-        final ByteArrayInputStream stream = new ByteArrayInputStream(payloadBytes);
+        final DataInputStream stream = new DataInputStream(new ByteArrayInputStream(payloadBytes));
         final byte[] encryptedData = readByteArray(stream);
         final byte[] encryptedSymmetricKey = readByteArray(stream);
         final byte[] symmetricCipherIV = readByteArray(stream);
@@ -61,11 +64,17 @@ public final class CryptoPacketConverter {
         return new CryptoPacket(encryptedData, encryptedSymmetricKey, symmetricCipherIV);
     }
 
-    private byte[] readByteArray(ByteArrayInputStream stream) throws CryptoException {
-        final int length = stream.read();
-        if (length < 0) {
-            throw new CryptoException("Byte array cannot be parsed - does not represent a CryptoPacketPayload");
+    private byte[] readByteArray(DataInputStream stream) throws CryptoException {
+        final int length;
+        try {
+            length = stream.readInt();
+            if (length < 0) {
+                throw new CryptoException("Byte array cannot be parsed - does not represent a CryptoPacketPayload");
+            }
+        } catch (IOException e) {
+            throw new CryptoException("Byte array does not contain a length - does not represent a CryptoPacketPayload");
         }
+
         final byte[] bytes = new byte[length];
         final int nrBytesRead;
         try {

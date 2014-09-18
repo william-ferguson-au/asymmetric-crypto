@@ -1,10 +1,13 @@
 package au.com.xandar.crypto;
 
+import java.util.Arrays;
+
 /**
  * Represents data encrypted symmetrically along with the key used to encrypt the data
  * encrypted using an asymmetric mechanism.
  * <p/>
  * You cannot use public key cryptography to encrypt data larger than the (keySize / 8) - 11.
+ * <p/>
  * So instead you generate a random symmetric key, encrypt your data using that and then
  * encrypt the symmetric key using your public/private key and send both encrypted data
  * plus encrypted symmetric key.
@@ -31,5 +34,46 @@ public final class CryptoPacket {
 
     public byte[] getSymmetricCipherInitializationVector() {
         return symmetricCipherInitializationVector;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof CryptoPacket)) {
+            return false;
+        }
+
+        CryptoPacket that = (CryptoPacket) o;
+
+        if (!Arrays.equals(encryptedData, that.encryptedData)) {
+            return false;
+        }
+        if (!Arrays.equals(encryptedSymmetricKey, that.encryptedSymmetricKey)) {
+            return false;
+        }
+        if (!Arrays.equals(symmetricCipherInitializationVector, that.symmetricCipherInitializationVector)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(encryptedData);
+        result = 31 * result + Arrays.hashCode(encryptedSymmetricKey);
+        result = 31 * result + Arrays.hashCode(symmetricCipherInitializationVector);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "CryptoPacket{" +
+            "encryptedData=" + Arrays.toString(encryptedData) +
+            ",\n encryptedSymmetricKey=" + Arrays.toString(encryptedSymmetricKey) +
+            ",\n symmetricCipherInitializationVector=" + Arrays.toString(symmetricCipherInitializationVector) +
+            "\n}";
     }
 }

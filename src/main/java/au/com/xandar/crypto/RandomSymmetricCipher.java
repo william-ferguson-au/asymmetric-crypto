@@ -1,8 +1,16 @@
 package au.com.xandar.crypto;
 
-import javax.crypto.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
-import java.security.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 /**
  * Encrypts data using a randomly generated symmetric key,
@@ -27,7 +35,7 @@ public final class RandomSymmetricCipher {
      * then entire output is collated in the returned CryptoPacket.
      *
      * @param data              Data to encrypt.
-     * @param privateKeyBase64  Base64 encoded PrivateKey to sue to encrypt the symmetric key.
+     * @param privateKeyBase64  Base64 encoded PrivateKey to use to encrypt the symmetric key.
      * @return CryptoPacket containing the encrypted data, encrypted symmetric key and symmetric cipher IV.
      * @throws CryptoException if the data could not be encrypted.
      */
@@ -48,7 +56,7 @@ public final class RandomSymmetricCipher {
      * @return CryptoPacket containing the encrypted data, encrypted symmetric key and symmetric cipher IV.
      * @throws CryptoException if the data could not be encrypted.
      */
-    public CryptoPacket encrypt(byte[] data, PrivateKey privateKey) throws CryptoException {
+    private CryptoPacket encrypt(byte[] data, PrivateKey privateKey) throws CryptoException {
         // Create random symmetric key
         final SymmetricKeyFactory keyFactory = new SymmetricKeyFactory();
         final SecretKey symmetricKey = keyFactory.generateRandomKey();
@@ -144,14 +152,15 @@ public final class RandomSymmetricCipher {
      * @return byte array of the decrypted data.
      * @throws CryptoException if the publicKey cannot decrypt the encrypted symmetric key, or the symmetric key cannot decrypt the data.
      */
-    public byte[] decrypt(CryptoPacket cryptoPacket, PublicKey publicKey) throws CryptoException {
+    private byte[] decrypt(CryptoPacket cryptoPacket, PublicKey publicKey) throws CryptoException {
         // Decrypt cryptoPacket#encryptedSymmetricKey using asymmetricKey
         final SecretKey symmetricKey;
         try {
             // asymmetric public/private key cipher
             final Cipher rsaCipher = Cipher.getInstance(PUBLIC_KEY_CIPHER);
             rsaCipher.init(Cipher.DECRYPT_MODE, publicKey);
-            final byte[] rawSymmetricKey = rsaCipher.doFinal(cryptoPacket.getEncryptedSymmetricKey());
+            final byte[] encryptedSymmetricKey = cryptoPacket.getEncryptedSymmetricKey();
+            final byte[] rawSymmetricKey = rsaCipher.doFinal(encryptedSymmetricKey);
 
             final SymmetricKeyFactory keyFactory = new SymmetricKeyFactory();
             symmetricKey = keyFactory.generateKey(rawSymmetricKey);

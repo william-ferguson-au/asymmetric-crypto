@@ -30,7 +30,6 @@ public class RandomSymmetricCipherTest {
                     "eoxJEeDeow==";
 
     private final RandomSymmetricCipher cipher = new RandomSymmetricCipher();
-    private final CryptoPacketConverter cryptoPacketConverter = new CryptoPacketConverter();
 
     @Test
     public void testEncrypt() throws CryptoException {
@@ -38,14 +37,28 @@ public class RandomSymmetricCipherTest {
         testEncryptDecrypt(new BigInteger("12345").toByteArray());
     }
 
+    @Test
+    public void testEncryptLongString() throws CryptoException {
+        testEncryptDecrypt(getLongString(1000));
+    }
+
+    private byte[] getLongString(int nrBytes) {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < nrBytes; i++) {
+            final char chr = (char) ((i % 26) + 61); // 61 == 'a'
+            sb.append(chr);
+        }
+
+        return sb.toString().getBytes();
+    }
+
     private void testEncryptDecrypt(byte[] data) throws CryptoException {
         final CryptoPacket cryptoPacket = cipher.encrypt(data, PRIVATE_KEY_BASE64);
-        final String base64EncryptedData = cryptoPacketConverter.convert(cryptoPacket);
 
-        System.out.println("Base64EncryptedData=" + base64EncryptedData);
+        System.out.println("cryptoPacket=" + cryptoPacket);
 
         // Convert the data into a byte array that can be readily reconstituted at the other end.
-        final byte[] outputBytes = cipher.decrypt(base64EncryptedData, PUBLIC_KEY_BASE64);
+        final byte[] outputBytes = cipher.decrypt(cryptoPacket, PUBLIC_KEY_BASE64);
 
         Assert.assertArrayEquals(data, outputBytes);
     }
