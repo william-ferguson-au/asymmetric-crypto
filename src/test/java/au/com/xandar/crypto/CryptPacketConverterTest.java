@@ -77,18 +77,8 @@ public class CryptPacketConverterTest {
     @Test
     public void testCryptoPacketConverion() throws CryptoException {
         final CryptoPacket cryptoPacket = new CryptoPacket(ENCRYPTED_DATA, ENCRYPTED_SYMMETRIC_KEY, SYMMETRIC_CIPHER_INITIALIZATION_VECTOR);
-        System.out.println("cryptoPacket=" + cryptoPacket);
-        System.out.println("cryptoPacket#encryptedSymmetricKey#length=" + cryptoPacket.getEncryptedSymmetricKey().length);
-
         final String base64EncryptedData = cryptoPacketConverter.convert(cryptoPacket);
-        System.out.println();
-        System.out.println("Base64EncryptedData=" + base64EncryptedData);
-
         final CryptoPacket outputPacket = cryptoPacketConverter.convert(base64EncryptedData);
-        System.out.println();
-        System.out.println("cryptoPacket=" + outputPacket);
-        System.out.println("cryptoPacket#encryptedSymmetricKey#length=" + outputPacket.getEncryptedSymmetricKey().length);
-        System.out.println();
 
         Assert.assertArrayEquals(cryptoPacket.getEncryptedData(), outputPacket.getEncryptedData());
         Assert.assertArrayEquals(cryptoPacket.getEncryptedSymmetricKey(), outputPacket.getEncryptedSymmetricKey());

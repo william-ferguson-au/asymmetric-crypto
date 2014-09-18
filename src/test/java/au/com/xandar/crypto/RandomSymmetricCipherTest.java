@@ -55,8 +55,6 @@ public class RandomSymmetricCipherTest {
     private void testEncryptDecrypt(byte[] data) throws CryptoException {
         final CryptoPacket cryptoPacket = cipher.encrypt(data, PRIVATE_KEY_BASE64);
 
-        System.out.println("cryptoPacket=" + cryptoPacket);
-
         // Convert the data into a byte array that can be readily reconstituted at the other end.
         final byte[] outputBytes = cipher.decrypt(cryptoPacket, PUBLIC_KEY_BASE64);
 

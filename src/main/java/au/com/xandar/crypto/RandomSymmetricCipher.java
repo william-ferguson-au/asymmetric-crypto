@@ -28,6 +28,29 @@ public final class RandomSymmetricCipher {
     private final static String SYMMETRIC_CIPHER = "DESede/CBC/PKCS5Padding";
     private final static String PUBLIC_KEY_CIPHER = "RSA/ECB/PKCS1Padding";
 
+    private String symmetricCipherName = SYMMETRIC_CIPHER;
+    private String publicKeyCipherName = PUBLIC_KEY_CIPHER;
+
+    /**
+     * Defaults to "DESede/CBC/PKCS5Padding".
+     *
+     * @param symmetricCipher   Cipher to use for encryption of the data..
+     */
+    @SuppressWarnings("unused")
+    public void setSymmetricCipher(String symmetricCipher) {
+        this.symmetricCipherName = symmetricCipher;
+    }
+
+    /**
+     * Defaults to "RSA/ECB/PKCS1Padding".
+     *
+     * @param publicKeyCipher   Cipher to use for encryption of the random symmetric key.
+     */
+    @SuppressWarnings("unused")
+    public void setPublicKeyCipher(String publicKeyCipher) {
+        this.publicKeyCipherName = publicKeyCipher;
+    }
+
     /**
      * Encrypts data using a randomly generated symmetric key.
      *
@@ -65,14 +88,14 @@ public final class RandomSymmetricCipher {
         final byte[] encryptedData;
         final byte[] symmetricCipherInitializationVector;
         try {
-            final Cipher symmetricCipher = Cipher.getInstance(SYMMETRIC_CIPHER);
+            final Cipher symmetricCipher = Cipher.getInstance(symmetricCipherName);
             symmetricCipher.init(Cipher.ENCRYPT_MODE, symmetricKey);
             encryptedData = symmetricCipher.doFinal(data);
             symmetricCipherInitializationVector = symmetricCipher.getIV();
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("All JVMs are required to support the '" + SYMMETRIC_CIPHER + "' cipher");
+            throw new IllegalStateException("JVM does not support the '" + symmetricCipherName + "' cipher");
         } catch (NoSuchPaddingException e) {
-            throw new IllegalStateException("All JVMs are required to support the '" + SYMMETRIC_CIPHER + "' cipher");
+            throw new IllegalStateException("JVM does not support the '" + symmetricCipherName + "' cipher");
         } catch (InvalidKeyException e) {
             throw new IllegalStateException("All JMs are required to support DESede keys", e);
         } catch (BadPaddingException e) {
@@ -85,14 +108,14 @@ public final class RandomSymmetricCipher {
         final Cipher rsaCipher; // asymmetric public/private key cipher
         final byte[] encryptedSymmetricKey;
         try {
-            rsaCipher = Cipher.getInstance(PUBLIC_KEY_CIPHER);
+            rsaCipher = Cipher.getInstance(publicKeyCipherName);
             rsaCipher.init(Cipher.ENCRYPT_MODE, privateKey);
             final byte[] rawSymmetricKey = keyFactory.getRawKey(symmetricKey);
             encryptedSymmetricKey = rsaCipher.doFinal(rawSymmetricKey);
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("All JVMs are required to support the '" + PUBLIC_KEY_CIPHER + "' cipher");
+            throw new IllegalStateException("JVM does not support the '" + publicKeyCipherName + "' cipher");
         } catch (NoSuchPaddingException e) {
-            throw new IllegalStateException("All JVMs are required to support the '" + PUBLIC_KEY_CIPHER + "' cipher");
+            throw new IllegalStateException("JVM does not support the '" + publicKeyCipherName + "' cipher");
         } catch (InvalidKeyException e) {
             throw new CryptoException("Failed to initialise public key cipher", e);
         } catch (BadPaddingException e) {
@@ -157,7 +180,7 @@ public final class RandomSymmetricCipher {
         final SecretKey symmetricKey;
         try {
             // asymmetric public/private key cipher
-            final Cipher rsaCipher = Cipher.getInstance(PUBLIC_KEY_CIPHER);
+            final Cipher rsaCipher = Cipher.getInstance(publicKeyCipherName);
             rsaCipher.init(Cipher.DECRYPT_MODE, publicKey);
             final byte[] encryptedSymmetricKey = cryptoPacket.getEncryptedSymmetricKey();
             final byte[] rawSymmetricKey = rsaCipher.doFinal(encryptedSymmetricKey);
@@ -166,9 +189,9 @@ public final class RandomSymmetricCipher {
             symmetricKey = keyFactory.generateKey(rawSymmetricKey);
 
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("All JVMs are required to support the '" + PUBLIC_KEY_CIPHER + "' cipher");
+            throw new IllegalStateException("JVM does not support the '" + publicKeyCipherName + "' cipher");
         } catch (NoSuchPaddingException e) {
-            throw new IllegalStateException("All JVMs are required to support the '" + PUBLIC_KEY_CIPHER + "' cipher");
+            throw new IllegalStateException("JVM does not support the '" + publicKeyCipherName + "' cipher");
         } catch (InvalidKeyException e) {
             throw new CryptoException("Failed to initialise cipher", e);
         } catch (BadPaddingException e) {
@@ -179,14 +202,14 @@ public final class RandomSymmetricCipher {
 
         // Decrypt cryptoPacket#encryptedData using symmetricKey
         try {
-            final Cipher symmetricCipher = Cipher.getInstance(SYMMETRIC_CIPHER);
+            final Cipher symmetricCipher = Cipher.getInstance(symmetricCipherName);
             final IvParameterSpec ivParameterSpec = new IvParameterSpec(cryptoPacket.getSymmetricCipherInitializationVector());
             symmetricCipher.init(Cipher.DECRYPT_MODE, symmetricKey, ivParameterSpec);
             return symmetricCipher.doFinal(cryptoPacket.getEncryptedData());
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException("All JVMs are required to support the '" + SYMMETRIC_CIPHER + "' cipher");
+            throw new IllegalStateException("JVM does not support the '" + symmetricCipherName + "' cipher");
         } catch (NoSuchPaddingException e) {
-            throw new IllegalStateException("All JVMs are required to support the '" + SYMMETRIC_CIPHER + "' cipher");
+            throw new IllegalStateException("JVM does not support the '" + symmetricCipherName + "' cipher");
         } catch (IllegalBlockSizeException e) {
             throw new CryptoException("Failed to decrypt data", e);
         } catch (BadPaddingException e) {
