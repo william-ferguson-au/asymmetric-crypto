@@ -23,7 +23,7 @@ import java.security.PublicKey;
  * @see <a href="stackoverflow.com/questions/10007147/getting-a-illegalblocksizeexception-data-must-not-be-longer-than-256-bytes-when">Data must not be lolnger than 256 bytes</a>
  * @see <a href="stackoverflow.com/questions/9655920/encrypt-long-string-with-rsa-java">Encrypt long string with RSA</a>
  */
-public final class RandomSymmetricCipher {
+public final class AsymmetricCipher {
 
     private final static String SYMMETRIC_CIPHER = "DESede/CBC/PKCS5Padding";
     private final static String PUBLIC_KEY_CIPHER = "RSA/ECB/PKCS1Padding";
@@ -129,24 +129,6 @@ public final class RandomSymmetricCipher {
 
 
     // Decrypting
-
-    /**
-     * Decrypts a Base64 encoded CryptoPacket using a Base64 encoded PublicKey.
-     *
-     * @param base64EncodedPayload  Base64 encoded CryptoPacket containing the encrypted data, encrypted symmetric key and symmetric cipher IV.
-     * @param publicKeyBase64       Base64 encoding of the PublicKey to use to decrypt the symmetric key.
-     * @return byte array of the decrypted data.
-     * @throws CryptoException if the publicKey cannot decrypt the encrypted symmetric key,
-     *      or the symmetric key cannot decrypt the data,
-     *      or the Base64 encoded PublicKey cannot be decoded
-     *      or the Base64 encoded CryptoPacket cannot be converted to a CryptoPacket.
-     */
-    public byte[] decrypt(String base64EncodedPayload, String publicKeyBase64) throws CryptoException {
-        // Convert Base64EncodedPayload into CryptoPacket
-        final CryptoPacketConverter cryptoPacketConverter = new CryptoPacketConverter();
-        final CryptoPacket cryptoPacket = cryptoPacketConverter.convert(base64EncodedPayload);
-        return decrypt(cryptoPacket, publicKeyBase64);
-    }
 
     /**
      * Decrypts a CryptoPacket using a Base64 encoded PublicKey.

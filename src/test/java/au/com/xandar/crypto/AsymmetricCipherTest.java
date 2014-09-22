@@ -8,7 +8,7 @@ import java.math.BigInteger;
 /**
  * Tests RandomSymmetricCipher.
  */
-public class RandomSymmetricCipherTest {
+public class AsymmetricCipherTest {
 
     private static final String PUBLIC_KEY_BASE64 =
             "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCKkC/b2fjIdS8atGeX/cOP8YWeEypeGnB1ICap\n" +
@@ -29,7 +29,7 @@ public class RandomSymmetricCipherTest {
                     "ooGmtWsgxDSThLn2l+gYhfZLy+hrewTWc3rvfd59Vmdvw+06d4PFM6mlwE8SJPON2uFfaztwoOFy\n" +
                     "eoxJEeDeow==";
 
-    private final RandomSymmetricCipher cipher = new RandomSymmetricCipher();
+    private final AsymmetricCipher cipher = new AsymmetricCipher();
 
     @Test
     public void testEncrypt() throws CryptoException {

@@ -25,6 +25,9 @@ public final class CryptoPacketConverter {
 
     private final Base64 base64 = new Base64();
 
+    /**
+     * Converts a CryptoPacket into a Base64 encoded String.
+     */
     public String convert(CryptoPacket cryptoPacket) throws CryptoException {
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
@@ -41,16 +44,25 @@ public final class CryptoPacketConverter {
             throw new CryptoException("Cannot convert CryptoPacket into a Base64 String", e);
         }
 
-        final byte[] jsonPayload = stream.toByteArray();
-        final byte[] base64Payload = base64.encode(jsonPayload);
+        final byte[] payload = stream.toByteArray();
+        final byte[] base64Payload = base64.encode(payload);
 
-        return new String(base64Payload);
+        try {
+            return new String(base64Payload, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // UTF-8 should always be supported.
+            throw new CryptoException("Could not encode Base64 String", e);
+        }
     }
 
-    public CryptoPacket convert(String base64Payload) throws CryptoException {
+    /**
+     * Converts a Base64 encoded String into a CryptoPacket.
+     */
+    public CryptoPacket convert(final String base64Payload) throws CryptoException {
         final byte[] payloadBytes;
         try {
-            payloadBytes = base64.decode(base64Payload.getBytes("UTF-8"));
+            final byte[] base64PayloadBytes = base64Payload.getBytes("UTF-8");
+            payloadBytes = base64.decode(base64PayloadBytes);
         } catch (UnsupportedEncodingException e) {
             // UTF-8 should always be supported.
             throw new CryptoException("Could not decode Base64 String", e);

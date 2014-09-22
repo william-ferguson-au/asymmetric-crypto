@@ -71,9 +71,28 @@ public final class CryptoPacket {
     @Override
     public String toString() {
         return "CryptoPacket{" +
-            "encryptedData=" + Arrays.toString(encryptedData) +
-            ",\n encryptedSymmetricKey=" + Arrays.toString(encryptedSymmetricKey) +
-            ",\n symmetricCipherInitializationVector=" + Arrays.toString(symmetricCipherInitializationVector) +
+            "\n encryptedData=" + toReadableOutput("                ", encryptedData) +
+            ",\n encryptedSymmetricKey=" + toReadableOutput("                ", encryptedSymmetricKey) +
+            ",\n symmetricCipherInitializationVector=" + toReadableOutput("                ", symmetricCipherInitializationVector) +
             "\n}";
+    }
+
+    private String toReadableOutput(String prepend, byte[] data) {
+        final StringBuilder sb = new StringBuilder();
+        int i = 0;
+        sb.append('[');
+        for (byte ch : data) {
+            if (sb.length() > 1) {
+                sb.append(", ");
+            }
+            if (i % 26 == 25) {
+                sb.append('\n'); // Wrap every 26 bytes
+                sb.append(prepend);
+            }
+            sb.append(ch);
+            i++;
+        }
+        sb.append(']');
+        return sb.toString();
     }
 }
