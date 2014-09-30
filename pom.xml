@@ -14,13 +14,13 @@
 
     <groupId>au.com.xandar.crypto</groupId>
     <artifactId>asymmetric-crypto</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.6</version>
 
     <scm>
         <connection>scm:git:git@github.com:william-ferguson-au/asymmetric-crypto.git</connection>
         <developerConnection>scm:git:git@github.com:william-ferguson-au/asymmetric-crypto.git</developerConnection>
         <url>ssh://git@github.com:william-ferguson-au/asymmetric-crypto.git</url>
-        <tag>HEAD</tag>
+        <tag>asymmetric-crypto-1.0.6</tag>
     </scm>
 
     <distributionManagement>
