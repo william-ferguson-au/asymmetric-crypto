@@ -12,7 +12,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>au.com.xandar</groupId>
+    <groupId>au.com.xandar.crypto</groupId>
     <artifactId>asymmetric-crypto</artifactId>
     <version>1.0.6-SNAPSHOT</version>
 
