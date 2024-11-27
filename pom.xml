@@ -16,6 +16,11 @@
     <artifactId>asymmetric-crypto</artifactId>
     <version>1.0.8-SNAPSHOT</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <wylas.repo.url.release>https://repo.repsy.io/mvn/william_wylas/default</wylas.repo.url.release>
+    </properties>
+
     <scm>
         <connection>scm:git:git@github.com:william-ferguson-au/asymmetric-crypto.git</connection>
         <developerConnection>scm:git:git@github.com:william-ferguson-au/asymmetric-crypto.git</developerConnection>
@@ -23,11 +28,26 @@
         <tag>asymmetric-crypto-1.0.7</tag>
     </scm>
 
+    <distributionManagement>
+        <downloadUrl>${wylas.repo.url.release}</downloadUrl>
+        <repository>
+            <id>wylas-repo</id>
+            <name>Wylas Repository</name>
+            <url>${wylas.repo.url.release}</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>wylas-repo</id>
+            <name>Wylas Snapshot Repository</name>
+            <url>${wylas.repo.url.release}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.15</version>
+            <version>1.16.1</version>
         </dependency>
 
         <dependency>
